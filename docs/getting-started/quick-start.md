@@ -32,7 +32,13 @@ In this guide, you'll learn how to:
 First, install the required packages:
 
 ```bash
-pnpm add @xhub-chat/core @xhub-chat/react
+pnpm add @xhub-chat/react
+```
+
+If needed, also install core package:
+
+```bash
+pnpm add @xhub-chat/core
 ```
 
 ## Step 2: Create Provider Wrapper
@@ -40,7 +46,7 @@ pnpm add @xhub-chat/core @xhub-chat/react
 Create a provider component that wraps the SDK provider with your configuration:
 
 ```tsx title="src/components/providers/XHubChatProvider.tsx"
-import type { ICreateClientOpts } from '@xhub-chat/core';
+import type { ICreateClientOpts } from '@xhub-chat/react';
 import { XHubChatProvider as XHubChatProviderSDK } from '@xhub-chat/react';
 
 export default function XHubChatProvider({ 
@@ -83,7 +89,7 @@ Create a component to display chat rooms with unread message badges:
 
 ```tsx title="src/components/RoomList.tsx"
 import { useRooms } from '@xhub-chat/react';
-import type { Room } from '@xhub-chat/core';
+import type { Room } from '@xhub-chat/react';
 
 interface RoomListProps {
   selectedRoomId: string | null;
@@ -142,7 +148,7 @@ Show messages from a room with pagination and reactions:
 
 ```tsx title="src/components/MessageList.tsx"
 import { useTimeline, Direction } from '@xhub-chat/react';
-import type { Room, XHubChatEvent } from '@xhub-chat/core';
+import type { Room, XHubChatEvent } from '@xhub-chat/react';
 import { Message } from './Message';
 
 interface MessageListProps {
@@ -216,7 +222,7 @@ export function MessageList({ room, onReply }: MessageListProps) {
 Build a message component with reactions and thread support:
 
 ```tsx title="src/components/Message.tsx"
-import type { Relations, XHubChatEvent } from '@xhub-chat/core';
+import type { Relations, XHubChatEvent } from '@xhub-chat/react';
 import { useReactions, useThread, useXHubChat } from '@xhub-chat/react';
 
 interface MessageProps {
