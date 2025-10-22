@@ -26,6 +26,8 @@ In this guide, you'll learn how to:
 
 1. Tất cả message được xem là 1 đối tượng event `XHubChatEvent`. Để lấy thông tin từ message xem các api trong đối tượng `XHubChatEvent`
 2. Mỗi room sẽ có 1 **timeline-set** chứa nhiều timeline nhỏ, mỗi **timeline** sẽ chứa các event (message, reaction, etc..)
+3. Room sẽ có 2 dạng là phòng chat và bài post, mỗi dạng sẽ có UI và tính năng khác nhau tuỳ theo mục đích sử dụng, sử dụng thuộc tính `room.roomData.category` để phân biệt. Các tính năng like/unlike chỉ thực hiện được trong các phòng là bài Post.
+4. Sử dụng `goIntoRoom()` khi vào phòng để đánh dấu đã đọc, sử dụng `goOutRoom()` khi rời phòng để cập nhật trạng thái online/offline. **Bắt buộc**
 
 ## Step 1: Install Packages
 
