@@ -28,6 +28,7 @@ In this guide, you'll learn how to:
 2. Mỗi room sẽ có 1 **timeline-set** chứa nhiều timeline nhỏ, mỗi **timeline** sẽ chứa các event (message, reaction, etc..)
 3. Room sẽ có 2 dạng là phòng chat và bài post, mỗi dạng sẽ có UI và tính năng khác nhau tuỳ theo mục đích sử dụng, sử dụng thuộc tính `room.roomData.category` để phân biệt. Các tính năng like/unlike chỉ thực hiện được trong các phòng là bài Post.
 4. Sử dụng `goIntoRoom()` trong đối tượng `room` khi vào phòng để đánh dấu đã đọc, sử dụng `goOutRoom()` khi rời phòng để cập nhật trạng thái online/offline. **Bắt buộc**
+5. Khi tải danh sách các phòng thì các tin nhắn trong phòng chưa được load, chỉ có 1 tin nhắn cuối cùng trong phòng, khi nào cần load thêm tin nhắn thì cần gọi hàm `paginate` trong `useTimeline` để load tin nhắn trong phòng đó.
 
 ## Step 1: Install Packages
 
@@ -172,9 +173,12 @@ export function MessageList({ room, onReply }: MessageListProps) {
     timelineSet: room.getUnfilteredTimelineSet() 
   });
 
-  if (events.length === 0) {
-    return <p>Loading messages...</p>;
-  }
+  /** Messages in room not load when load room, need first call to get message in room */
+  useEffect(() => {
+    if (events.length > 0 && events.length < 20) {
+      paginate(Direction.Backward, 50, true, 50, true);
+    }
+  }, [events, paginate]);
 
   return (
     <div className="messages-list">
