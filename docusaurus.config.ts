@@ -211,7 +211,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} TekNix Corporation. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} TekNix Corporation.`,
     },
     prism: {
       theme: prismThemes.dracula,
