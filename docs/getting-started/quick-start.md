@@ -284,6 +284,35 @@ export function Message({ event, onReply, onReact, reactions }: MessageProps) {
 }
 ```
 
+## Step 6: Get contacts and create direct message room
+
+```tsx title="src/components/ContactList.tsx"
+import { useContacts } from '@xhub-chat/react';
+
+export default function ContactList() {
+  const { contacts, createDirectRoomWithContact } = useContacts();
+
+  return (
+    <div className="status-card" style={{ width: '20%', height: '100%', overflowY: 'auto' }}>
+      <h3>Contacts</h3>
+      {contacts.map(contact => (
+        <div
+          onClick={async () => {
+            const room = await createDirectRoomWithContact(contact.channel_slug);
+            // Do something with the created room (navigate to it, etc.)
+          }}
+        >
+          <div className="contact-name">{contact.displayName}</div>
+          <div className="contact-presence" style={{ fontSize: 12, color: '#a7a7a7ff' }}>
+            {contact.isOnline() ? 'Online' : 'Offline'}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 ## 🎉 Congratulations
 
 You've successfully created a full-featured chat application with XHub Chat! Your app now supports:
