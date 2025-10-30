@@ -13,7 +13,7 @@ Learn how to build your first real-time chat application with XHub Chat in just 
 In this guide, you'll learn how to:
 
 1. Set up the XHub Chat client with Provider
-2. Display rooms with unread counts
+2. Get Room list and paginate rooms
 3. Show messages with pagination
 4. Send and receive messages in real-time
 5. Handle reactions and threads
@@ -34,15 +34,31 @@ In this guide, you'll learn how to:
 
 First, install the required packages:
 
-```bash
-pnpm add @xhub-chat/react
-```
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-If needed, also install core package:
-
-```bash
-pnpm add @xhub-chat/core
-```
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    ```bash
+    npm install @xhub-chat/react
+    ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```bash
+    pnpm add @xhub-chat/react
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash
+    yarn add @xhub-chat/react
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```bash
+    bun add @xhub-chat/react
+    ```
+  </TabItem>
+</Tabs>
 
 ## Step 2: Create Provider Wrapper
 
@@ -52,11 +68,7 @@ Create a provider component that wraps the SDK provider with your configuration:
 import type { ICreateClientOpts } from '@xhub-chat/react';
 import { XHubChatProvider as XHubChatProviderSDK } from '@xhub-chat/react';
 
-export default function XHubChatProvider({ 
-  children 
-}: { 
-  children: React.ReactNode 
-}) {
+export default function XHubChatProvider({ children }: { children: React.ReactNode }) {
   const clientOptions: ICreateClientOpts = {
     clientParams: { api_key: 'YOUR_API_KEY' },
     baseUrl: 'https://your-server.com/',
@@ -72,7 +84,8 @@ export default function XHubChatProvider({
 
   return (
     <XHubChatProviderSDK
-      workerFactory={indexeddbWorkerFactory} // (Optional) Enable IndexedDB for offline support
+      // (Optional) Enable IndexedDB for offline support
+      workerFactory={indexeddbWorkerFactory}
       clientOptions={clientOptions}
       startOptions={{ initialSyncLimit: 10 }}
     >
@@ -86,9 +99,31 @@ export default function XHubChatProvider({
 See the [Configuration Guide](/docs/getting-started/requirements) for all available options.
 :::
 
-## Step 3: Display Rooms with Unread Counts
+Wrap your application with the `XHubChatProvider`:
 
-Create a component to display chat rooms with unread message badges:
+```tsx title="src/app/layout.tsx"
+import XHubChatProvider from '@/components/providers/XHubChatProvider';
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html suppressHydrationWarning>
+      <body>
+        <XHubChatProvider>
+          {children}
+        </XHubChatProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Step 3: Get Room list and paginate rooms
+
+Create a component to display chat rooms:
 
 ```tsx title="src/components/RoomList.tsx"
 import { useRooms } from '@xhub-chat/react';
@@ -100,9 +135,9 @@ interface RoomListProps {
 }
 
 export function RoomList({ selectedRoomId, onRoomSelect }: RoomListProps) {
-  const { rooms, canPaginate, paginate, fetching } = useRooms();
+  const { rooms, canPaginate, paginate, fetching, isLoading } = useRooms();
 
-  if (rooms.length === 0) {
+  if (isLoading) {
     return <p>Loading rooms...</p>;
   }
 
@@ -114,7 +149,7 @@ export function RoomList({ selectedRoomId, onRoomSelect }: RoomListProps) {
           className={`room-item ${selectedRoomId === room.roomId ? 'selected' : ''}`}
           onClick={() => {
             onRoomSelect(room.roomId);
-            // Mark room as entered
+            // TODO: Mark room as entered
             room.goIntoRoom();
           }}
         >
@@ -135,9 +170,9 @@ export function RoomList({ selectedRoomId, onRoomSelect }: RoomListProps) {
       {/* Load more rooms */}
       {canPaginate && (
         fetching ? (
-          <span className="loader" />
+          <Loader />
         ) : (
-          <button onClick={() => paginate(20)}>Load More Rooms</button>
+          <button onClick={() => paginate(20)}>Load More</button>
         )
       )}
     </div>
@@ -145,40 +180,59 @@ export function RoomList({ selectedRoomId, onRoomSelect }: RoomListProps) {
 }
 ```
 
-## Step 4: Display Messages with Pagination, Send message
+:::info Room Category
+Use `Room.getCategory()` to specialize room rendering based on its type (Chat room or Post). `RoomCategory`
+:::
 
-Show messages from a room with pagination and reactions:
+## Step 4: Display Messages with Pagination, Send message in chat room
+
+Show messages from a room with pagination and send new messages:
+
+:::info Attention
+
+- In Message List, use `useTimeline` to get messages and pagination functions.
+- With **chat room**, and **message** just can send and receive text message. Not support reply and reaction.
+:::
 
 ```tsx title="src/components/MessageList.tsx"
 import { useTimeline, Direction } from '@xhub-chat/react';
-import type { Room, XHubChatEvent } from '@xhub-chat/react';
+import type { Room } from '@xhub-chat/react';
 import { Message } from './Message';
 
 interface MessageListProps {
   room: Room;
-  onReply: (event: XHubChatEvent) => void;
 }
 
-export function MessageList({ room, onReply }: MessageListProps) {
+export function MessageList({ room }: MessageListProps) {
   const {
     events,
     paginate,
-    reactEvent,
     sendTextMessage,
     canPaginateBackwards,
     isPaginatingBackwards,
-    getReactionsWithReactionsType,
   } = useTimeline({ 
     roomId: room.roomId, 
     timelineSet: room.getUnfilteredTimelineSet() 
   });
 
-  /** Messages in room not load when load room, need first call to get message in room */
-  useEffect(() => {
-    if (events.length > 0 && events.length < 20) {
-      paginate(Direction.Backward, 50, true, 50, true);
+  const handlePaginate = () => {
+    if (canPaginateBackwards && !isPaginatingBackwards) {
+      paginate(Direction.Backward, 50, true, 50);
     }
-  }, [events, paginate]);
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendTextMessage(textValue);
+    setTextValue('');
+  };
+
+  /** 
+   * Messages in room not load when init room,
+   * need first call to get message in room 
+   */
+  useEffect(() => handlePaginate(), []);
+
 
   return (
     <div className="messages-list">
@@ -186,32 +240,21 @@ export function MessageList({ room, onReply }: MessageListProps) {
       {events
         .sort((a, b) => b.getTs() - a.getTs())
         .map((event) => (
-          <Message
-            key={event.id}
-            event={event}
-            onReply={onReply}
-            onReact={reactEvent}
-            reactions={getReactionsWithReactionsType(event)}
-          />
+          <Message key={event.id} event={event} />
         ))}
 
       {/* Load older messages */}
       {canPaginateBackwards && (
         isPaginatingBackwards ? (
-          <span className="loader" />
+          <Loader />
         ) : (
-          <button onClick={() => paginate(Direction.Backward, 50, true, 50)}>
-            Load More Messages
+          <button onClick={handlePaginate}>
+            Load More
           </button>
         )
       )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendTextMessage(null, null, textValue);
-        }}
-      >
+      <form onSubmit={onSubmit}>
         <input
           value={textValue}
           onChange={e => setTextValue(e.target.value)}
@@ -225,59 +268,44 @@ export function MessageList({ room, onReply }: MessageListProps) {
 
 ## Step 5: Create Message Component
 
-Build a message component with reactions and thread support:
+Build a message component:
 
 ```tsx title="src/components/Message.tsx"
-import type { Relations, XHubChatEvent } from '@xhub-chat/react';
-import { useReactions, useThread, useXHubChat } from '@xhub-chat/react';
+import type { XHubChatEvent } from '@xhub-chat/react';
+import { useXHubChat } from '@xhub-chat/react';
 
 interface MessageProps {
   event: XHubChatEvent;
-  onReply?: (event: XHubChatEvent) => void;
-  onReact?: (reaction: string, event: XHubChatEvent) => void;
-  reactions: Relations | null;
 }
 
 export function Message({ event, onReply, onReact, reactions }: MessageProps) {
   const { client } = useXHubChat();
-  const { total } = useThread({ event, client: client ?? undefined });
-  const { myReactions, getTotalReactions } = useReactions({ reactions });
 
-  const isOwner = event.sender?.userId === client?.getUserId();
-  const totalReactions = getTotalReactions()?.reduce(
-    (acc, curr) => acc + curr.count, 
-    0
-  ) || 0;
+  // Or can use `client.getUserId()` if you provided userId in provider
+  const isOwner = event.sender?.userId === `$your-user-id`; 
+
+  /**
+   * Get sending status: `SENDING -> SENT -> null`
+   *  - SENDING -> Start call api to server
+   *  - SENT -> Received ack from server (not confirmed by server)
+   *  - `null` -> Send successfully (Common case for normal message)
+   */
+  const isSending = event.getAssociatedStatus() === EventStatus.SENDING;
 
   return (
-    <div
-      className={`message ${isOwner ? 'message-own' : ''}`}
-      onClick={() => onReply?.(event)}
-    >
-      <div className="message-sender">
-        {event.sender?.user?.displayName}
-      </div>
+    <div className={`message ${isOwner ? 'message-own' : ''}`}>
+      {/** Content */}
       <div className="message-content">
         {event.getContent()?.text || '[No content]'}
       </div>
       <div className="message-footer">
+        {/** Timestamp */}
         <span className="message-time">
           {new Date(event.getTs()).toLocaleString()}
         </span>
-        
-        {/* Reaction button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onReact?.('❤️', event);
-          }}
-          className="reaction-button"
-        >
-          {myReactions?.length ? '❤️' : '🤍'} {totalReactions}
-        </button>
 
         {/* Sending status */}
-        {event.getAssociatedStatus() === EventStatus.SENDING && <span className="loader"/>}
+        {isSending ? <Loader /> : <CheckIcon />}
       </div>
     </div>
   );
@@ -345,6 +373,7 @@ Now that you have a working chat application, you can:
 :::tip Complete Code
 The complete working code is available in the [playground app](https://github.com/XHub-Platform/xhub-chat/tree/main/apps/playground) on GitHub.
 :::
+
 - ✅ Show messages in a room
 - ✅ Send new messages
 - ✅ Load more messages with pagination

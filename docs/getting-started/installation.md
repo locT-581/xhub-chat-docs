@@ -103,25 +103,6 @@ pnpm list @xhub-chat/core @xhub-chat/react
 npm list @xhub-chat/core @xhub-chat/react
 ```
 
-## Development Installation
-
-If you want to contribute or work on XHub Chat locally:
-
-```bash
-# Clone the repository
-git clone https://github.com/XHub-Platform/xhub-chat.git
-cd xhub-chat
-
-# Install dependencies
-pnpm install
-
-# Build all packages
-pnpm build
-
-# Run tests
-pnpm test
-```
-
 ## Troubleshooting
 
 ### Common Issues

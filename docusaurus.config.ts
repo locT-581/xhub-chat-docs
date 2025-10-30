@@ -80,10 +80,10 @@ const config: Config = {
       respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'XHub Chat',
+      title: 'XHubChat',
       logo: {
         alt: 'XHub Chat Logo',
-        src: 'img/docusaurus.png',
+        src: 'img/xhubchat-logo.svg',
       },
       items: [
         {
@@ -92,18 +92,12 @@ const config: Config = {
           position: 'left',
           label: 'Getting Started',
         },
-        {
-          type: 'docSidebar',
-          sidebarId: 'coreConceptsSidebar',
-          position: 'left',
-          label: 'Core Concepts',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'packagesSidebar',
-          position: 'left',
-          label: 'Packages',
-        },
+        // {
+        //   type: 'docSidebar',
+        //   sidebarId: 'coreConceptsSidebar',
+        //   position: 'left',
+        //   label: 'Core Concepts',
+        // },
         {
           type: 'docSidebar',
           sidebarId: 'featuresSidebar',
@@ -121,18 +115,6 @@ const config: Config = {
           sidebarId: 'guidesSidebar',
           position: 'left',
           label: 'Guides',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'platformsSidebar',
-          position: 'left',
-          label: 'Platforms',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'advancedSidebar',
-          position: 'left',
-          label: 'Advanced',
         },
         {
           type: 'docSidebar',
@@ -201,12 +183,8 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/XHub-Platform/xhub-chat',
-            },
-            {
               label: 'NPM',
-              href: 'https://www.npmjs.com/package/@xhub-chat/core',
+              href: 'https://www.npmjs.com/package/@xhub-chat/react',
             },
           ],
         },
