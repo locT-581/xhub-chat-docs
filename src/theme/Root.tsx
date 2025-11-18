@@ -16,7 +16,6 @@ UNAUTHORIZED REPRODUCTION OR DISTRIBUTION IS STRICTLY PROHIBITED.
 */
 
 import ScrollProgress from '@site/src/components/ScrollProgress';
-import React from 'react';
 
 // Default implementation, that you can customize
 export default function Root({ children }: { children: React.ReactNode }): React.ReactElement {

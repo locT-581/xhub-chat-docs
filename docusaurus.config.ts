@@ -22,7 +22,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'XHub Chat',
+  title: 'XHubChat',
   tagline: 'Modern, type-safe chat SDK for React and beyond',
   favicon: 'img/favicon.ico',
 

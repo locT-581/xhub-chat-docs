@@ -168,7 +168,7 @@ function Feature({ title, emoji, description, gradient }: FeatureItem) {
 
 export default function HomepageFeatures(): ReactNode {
   return (
-    <section className={styles.features} style={{ padding: '4rem 0' }}>
+    <section className={styles.features} style={{ padding: '4rem 0 0' }}>
       <div className="container">
         <div className="text--center" style={{ marginBottom: '3rem' }}>
           <Heading
@@ -268,6 +268,7 @@ export default function HomepageFeatures(): ReactNode {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
