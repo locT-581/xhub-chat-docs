@@ -1,7 +1,5 @@
 {
-  "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build",
-  "devCommand": "npm run start",
-  "framework": "docusaurus",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ."
+  "buildCommand": "npx docusaurus build",
+  "devCommand": "npx docusaurus start",
+  "framework": "docusaurus"
 }
