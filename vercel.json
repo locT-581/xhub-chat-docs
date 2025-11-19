@@ -1,5 +1,6 @@
 {
+  "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npx docusaurus build",
   "devCommand": "npx docusaurus start",
-  "framework": "docusaurus"
+  "outputDirectory": "build"
 }
