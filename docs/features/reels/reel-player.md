@@ -496,4 +496,4 @@ function ReelPlayer({ reelId }: { reelId: string }) {
 - [Reels Feed](./reels-feed) - Load reels list
 - [Reel Comments](./reel-comments) - Comments for reels
 
-[Back to Reels Features](./index)
+[Back to Reels Features](/docs/features/reels/)

@@ -511,4 +511,4 @@ const handleSendComment = async (text: string) => {
 - [Reel Player](./reel-player) - Play reel videos
 - [Post Comments](../posts/comments) - Comments for posts
 
-[Back to Reels Features](./index)
+[Back to Reels Features](/docs/features/reels/)

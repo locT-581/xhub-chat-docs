@@ -460,4 +460,4 @@ function ReelsFeed() {
 - [Reel Player](./reel-player) - Play video and interact with reel
 - [Reel Comments](./reel-comments) - View and send comments
 
-[Back to Reels Features](./index)
+[Back to Reels Features](/docs/features/reels/)
