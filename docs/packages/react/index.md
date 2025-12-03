@@ -75,6 +75,7 @@ function RoomItem({ roomId }: { roomId: string }) {
 
 ### 🪝 Powerful Hooks
 
+**Messaging & Rooms:**
 - `useXHubChat` - Access client and core functionality
 - `useRooms` - Manage room lists with pagination
 - `useTimeline` - Handle messages and timeline
@@ -82,6 +83,16 @@ function RoomItem({ roomId }: { roomId: string }) {
 - `useThread` - Handle threaded messages
 - `useTyping` - Track typing indicators
 - `usePresence` - Monitor user presence
+
+**Reels (Short-form Videos):**
+- `useReelsFeed` - TikTok-style infinite scroll feed
+- `useReelRoom` - Get Room instance for a reel
+- `useReelComments` - Manage reel comments
+- `useMyReels` - Fetch and manage user's own reels
+
+**Posts:**
+- `usePost` - Post data and interactions
+- `usePostComments` - Post comments management
 
 ### 🎨 Provider System
 

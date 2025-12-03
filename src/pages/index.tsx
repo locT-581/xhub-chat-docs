@@ -86,7 +86,7 @@ export default function Home(): ReactNode {
     >
       <HomepageHeader />
 
-      <div style={{ width: '25vw', height: '25vh', position: 'absolute', zIndex: 10, top: '20%', left: 0 }}>
+      <div style={{ width: '32vw', height: '32vh', position: 'absolute', zIndex: 10, top: '20%', left: -10 }}>
         <RiveComponent style={{ width: '100%', height: '100%', marginLeft: '-20%' }} />
       </div>
 

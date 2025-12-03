@@ -162,6 +162,17 @@ const sidebars: SidebarsConfig = {
             'features/posts/reply-like-comments',
           ],
         },
+        {
+          type: 'category',
+          label: '🎬 Reels',
+          collapsible: true,
+          items: [
+            'features/reels/index',
+            'features/reels/reels-feed',
+            'features/reels/reel-player',
+            'features/reels/reel-comments',
+          ],
+        },
       ],
     },
   ],

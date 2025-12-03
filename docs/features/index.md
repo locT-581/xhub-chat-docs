@@ -26,6 +26,14 @@ Các tính năng liên quan đến bài viết (posts):
 - **[Comments](./posts/comments)** - Comment vào bài post
 - **[Reply & Like Comments](./posts/reply-like-comments)** - Trả lời và thích comment
 
+## 🎬 Reels Features
+
+Features related to Reels (short-form videos):
+
+- **[Reels Feed](./reels/reels-feed)** - Display reels list with infinite scroll
+- **[Reel Player](./reels/reel-player)** - Play video and interact with reel
+- **[Reel Comments](./reels/reel-comments)** - View and send comments for reels
+
 ## 🎨 Supported Platforms
 
 Mỗi tính năng đều có ví dụ code cho cả hai platform:

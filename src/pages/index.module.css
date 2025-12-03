@@ -3,6 +3,9 @@
  * and scoped locally.
  */
 
+html {
+  overflow-x: hidden;
+}
 
 .heroBanner {
   text-align: center;
@@ -20,4 +23,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

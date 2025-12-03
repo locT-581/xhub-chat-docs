@@ -591,6 +591,125 @@ const { events }: { events: XHubChatEvent[] } = useTimeline({ roomId });
 const { rooms }: { rooms: Room[] } = useRooms();
 ```
 
+---
+
+## Reels Hooks
+
+### useMyReels
+
+Fetch and manage the current user's own reels with filtering and pagination.
+
+**Type Signature:**
+
+```typescript
+function useMyReels(options?: UseMyReelsOptions): UseMyReelsReturn
+
+interface UseMyReelsOptions {
+  autoLoad?: boolean;
+  limit?: number;
+  initialFilters?: MyReelsFilter;
+}
+
+interface MyReelsFilter {
+  approving_status?: 'approved' | 'rejected' | 'pending';
+  privacy?: number;
+  sort?: string;
+  sorted?: 'asc' | 'desc';
+  cursor?: string;
+  limit?: number;
+}
+
+interface UseMyReelsReturn {
+  reels: ReelData[];
+  loading: boolean;
+  error: Error | null;
+  hasMore: boolean;
+  filters: MyReelsFilter;
+  loadMore: () => Promise<void>;
+  reload: (newFilters?: MyReelsFilter) => Promise<void>;
+  setFilters: (newFilters: MyReelsFilter) => void;
+}
+```
+
+**Usage:**
+
+```tsx
+import { useMyReels } from '@xhub-chat/react';
+
+function MyReelsPage() {
+  const { reels, loading, hasMore, loadMore } = useMyReels();
+
+  return (
+    <div>
+      {reels.map(reel => (
+        <ReelCard key={reel.id} reel={reel} />
+      ))}
+      {hasMore && <button onClick={loadMore}>Load More</button>}
+    </div>
+  );
+}
+```
+
+**Parameters:**
+
+- `options.autoLoad` - Auto-load reels on mount (default: `true`)
+- `options.limit` - Number of items per page (default: `10`)
+- `options.initialFilters` - Initial filter values
+
+**Returns:**
+
+- `reels` - Array of loaded reels
+- `loading` - Loading state
+- `error` - Error if any
+- `hasMore` - Whether more reels are available
+- `filters` - Current filter values
+- `loadMore` - Load next page of reels
+- `reload` - Reload from start with optional new filters
+- `setFilters` - Update filters and trigger reload
+
+**Example - With Filters:**
+
+```tsx
+function MyApprovedReels() {
+  const { reels, setFilters } = useMyReels({
+    initialFilters: { approving_status: 'approved' },
+  });
+
+  const showPending = () => {
+    setFilters({ approving_status: 'pending' });
+  };
+
+  return (
+    <div>
+      <button onClick={showPending}>Show Pending</button>
+      <ReelsList reels={reels} />
+    </div>
+  );
+}
+```
+
+**Example - Manual Load:**
+
+```tsx
+function MyReelsManual() {
+  const { reels, reload } = useMyReels({ autoLoad: false });
+
+  return (
+    <div>
+      <button onClick={() => reload()}>Load My Reels</button>
+      {reels.length > 0 && <ReelsList reels={reels} />}
+    </div>
+  );
+}
+```
+
+**See Also:**
+
+- [My Reels Guide](/docs/features/reels/my-reels) - Complete guide
+- [fetchMyReels](/docs/api/reference#fetchmyreels) - Core API method
+
+---
+
 ## Next Steps
 
 - [📚 Using with React](/docs/guides/using-with-react) - Complete React guide

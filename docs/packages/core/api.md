@@ -56,10 +56,79 @@ interface ICreateClientOpts {
 - `sendMessage(roomId: string, content: any): Promise<void>` - Send custom message
 - `resendEvent(event: Event): Promise<void>` - Resend failed event
 
+**Reels**
+
+- `paginateReels(opts?: { limit?: number }): Promise<void>` - Load more reels from feed
+- `canPaginateReels(): boolean` - Check if more reels available
+- `clearReelCache(): void` - Clear reels cache
+- `fetchMyReels(filter?: MyReelsFilter): Promise<MyReelsResponse>` - Fetch user's own reels
+
 **Events**
 
 - `on(event: string, handler: Function): void` - Register event listener
 - `off(event: string, handler: Function): void` - Remove event listener
 - `once(event: string, handler: Function): void` - One-time event listener
+
+---
+
+## Reels API
+
+### fetchMyReels
+
+Fetch the current user's own reels with filtering and pagination.
+
+**Signature:**
+
+```typescript
+fetchMyReels(filter?: MyReelsFilter): Promise<MyReelsResponse>
+```
+
+**Parameters:**
+
+```typescript
+interface MyReelsFilter {
+  approving_status?: 'approved' | 'rejected' | 'pending';
+  privacy?: number;
+  sort?: string;
+  sorted?: 'asc' | 'desc';
+  cursor?: string;
+  limit?: number;  // default: 10
+}
+```
+
+**Returns:**
+
+```typescript
+interface MyReelsResponse {
+  reels: ReelData[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+```
+
+**Example:**
+
+```typescript
+// Fetch approved reels
+const { reels, nextCursor, hasMore } = await client.fetchMyReels({
+  approving_status: 'approved',
+  limit: 20,
+});
+
+// Load next page
+if (hasMore && nextCursor) {
+  const nextPage = await client.fetchMyReels({
+    cursor: nextCursor,
+    limit: 20,
+  });
+}
+```
+
+**See Also:**
+
+- [My Reels Guide](/docs/features/reels/my-reels) - Complete guide with examples
+- [useMyReels Hook](/docs/api/hooks#usemyreels) - React hook wrapper
+
+---
 
 [Back to Core Package](/docs/packages/core/)
