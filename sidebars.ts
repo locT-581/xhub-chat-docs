@@ -171,6 +171,8 @@ const sidebars: SidebarsConfig = {
             'features/reels/reels-feed',
             'features/reels/reel-player',
             'features/reels/reel-comments',
+            'features/reels/trending-search',
+            'features/reels/view-tracking',
           ],
         },
       ],

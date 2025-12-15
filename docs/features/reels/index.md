@@ -19,6 +19,8 @@ XHub Chat's Reels system provides:
 - **❤️ Likes & Reactions** - Like and react to reels
 - **🔄 Pagination** - Auto-load more reels
 - **⚡ Performance** - Optimized memory with EphemeralStore
+- **🔥 Trending Search** - AI-powered trending keywords
+- **📊 View Tracking** - AI behavior analysis for recommendations
 
 ## 📚 Key Features
 
@@ -34,6 +36,11 @@ XHub Chat's Reels system provides:
 - **[Reel Player](./reel-player)** - Play video with Room instance
 - **[Comments](./reel-comments)** - View and send comments
 - **[Likes & Views](./reel-player#interactions)** - Like and view counts
+
+### Search & Analytics (NEW!)
+
+- **[Trending Search](./trending-search)** - Display AI-powered trending keywords for search suggestions
+- **[View Tracking](./view-tracking)** - Track user viewing behavior for AI recommendations
 
 ## 🎯 Use Cases
 
